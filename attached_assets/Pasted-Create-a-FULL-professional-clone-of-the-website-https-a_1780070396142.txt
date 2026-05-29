@@ -1,0 +1,151 @@
+Create a FULL professional clone of the website https://alberuni.uz/uz with a modern scalable architecture and clean production-ready code.
+
+IMPORTANT:
+
+* The website owner has officially granted permission to recreate the website.
+* Build everything from scratch.
+* Do NOT use iframe embedding.
+* Keep the project CLEAN and MINIMAL.
+* Do NOT generate unnecessary files, duplicate components, unused libraries, demo pages, fake APIs, or placeholder junk.
+* Every file must have a clear purpose.
+
+TECH STACK:
+
+* Next.js (latest App Router)
+* React
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* Shadcn/ui only if necessary
+* Responsive Design
+* SEO optimized
+
+MAIN GOAL:
+The website must look almost identical to the original:
+
+* same layout
+* same visual hierarchy
+* same section flow
+* same responsive behavior
+* same modern educational/professional feeling
+
+ADMIN PANEL REQUIREMENTS:
+Create a SIMPLE and CLEAN admin panel where I can easily update:
+
+* images
+* text
+* news
+* banners
+* statistics
+* contact information
+* homepage sections
+
+ADMIN FEATURES:
+
+* Secure login page
+* Dashboard
+* Upload image system
+* Replace existing images easily
+* Rich text editor for content
+* CRUD for news/articles
+* Simple UI
+* Mobile responsive admin panel
+
+IMAGE MANAGEMENT:
+VERY IMPORTANT:
+
+* Store all editable images inside a clearly organized folder structure
+
+* Example:
+  /public/images/hero
+  /public/images/news
+  /public/images/about
+  /public/images/gallery
+
+* Every image should be easy to find and replace manually
+
+* Use meaningful filenames
+
+* Add comments explaining image usage
+
+* Use optimized image loading with next/image
+
+CONTENT STRUCTURE:
+Create editable JSON/data structure or CMS-like local data files for:
+
+* homepage text
+* menu items
+* footer data
+* contacts
+* statistics
+* news cards
+
+I want to easily change content later WITHOUT touching many components.
+
+PROJECT STRUCTURE:
+Use a very clean architecture:
+
+/app
+/components
+/components/ui
+/components/sections
+/data
+/public/images
+/styles
+/lib
+/admin
+
+Avoid:
+
+* unnecessary wrappers
+* duplicate styles
+* dead code
+* unused packages
+* oversized dependencies
+* random generated files
+
+DESIGN REQUIREMENTS:
+
+* Modern premium UI
+* Elegant spacing
+* Smooth animations
+* Hover effects
+* Clean typography
+* Responsive on all devices
+* Fast loading
+* Accessibility improvements
+
+FEATURES:
+
+* Sticky navbar
+* Mobile hamburger menu
+* Scroll animations
+* Scroll-to-top button
+* Active menu highlighting
+* Lazy loading
+* Optimized performance
+* Clean transitions
+
+OUTPUT REQUIREMENTS:
+Generate:
+
+* Full folder structure
+* All pages
+* Components
+* Admin panel
+* Editable data system
+* Image upload logic
+* Tailwind setup
+* Responsive styles
+* Reusable architecture
+
+The code must be:
+
+* understandable
+* maintainable
+* scalable
+* beginner-friendly
+* production-ready
+
+Do NOT overengineer the project.
+Keep everything simple, organized, and professional.

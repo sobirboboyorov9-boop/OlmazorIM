@@ -3,20 +3,34 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Alberuni University API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: news
+    description: News and articles
+  - name: banners
+    description: Hero banners/sliders
+  - name: statistics
+    description: University statistics
+  - name: gallery
+    description: Photo gallery
+  - name: contacts
+    description: Contact information
+  - name: admin
+    description: Admin authentication
+  - name: content
+    description: Homepage content sections
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +38,584 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /news:
+    get:
+      operationId: listNews
+      tags: [news]
+      summary: List all news articles
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: category
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of news
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, total]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/NewsArticle" }
+                  total: { type: integer }
+    post:
+      operationId: createNewsArticle
+      tags: [news]
+      summary: Create a news article (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsArticle"
+
+  /news/featured:
+    get:
+      operationId: getFeaturedNews
+      tags: [news]
+      summary: Get featured/latest news for homepage
+      responses:
+        "200":
+          description: Featured news articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/NewsArticle" }
+
+  /news/{id}:
+    get:
+      operationId: getNewsArticle
+      tags: [news]
+      summary: Get a single news article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: News article
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsArticle"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateNewsArticle
+      tags: [news]
+      summary: Update a news article (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsArticle"
+    delete:
+      operationId: deleteNewsArticle
+      tags: [news]
+      summary: Delete a news article (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /banners:
+    get:
+      operationId: listBanners
+      tags: [banners]
+      summary: List active hero banners
+      responses:
+        "200":
+          description: List of banners
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Banner" }
+    post:
+      operationId: createBanner
+      tags: [banners]
+      summary: Create a banner (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BannerInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Banner"
+
+  /banners/{id}:
+    patch:
+      operationId: updateBanner
+      tags: [banners]
+      summary: Update a banner (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BannerUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Banner"
+    delete:
+      operationId: deleteBanner
+      tags: [banners]
+      summary: Delete a banner (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /statistics:
+    get:
+      operationId: getStatistics
+      tags: [statistics]
+      summary: Get university statistics
+      responses:
+        "200":
+          description: Statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+    patch:
+      operationId: updateStatistics
+      tags: [statistics]
+      summary: Update university statistics (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StatisticsUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+
+  /gallery:
+    get:
+      operationId: listGallery
+      tags: [gallery]
+      summary: List gallery images
+      responses:
+        "200":
+          description: Gallery images
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/GalleryImage" }
+    post:
+      operationId: createGalleryImage
+      tags: [gallery]
+      summary: Add gallery image (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GalleryImageInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GalleryImage" 
+
+  /gallery/{id}:
+    delete:
+      operationId: deleteGalleryImage
+      tags: [gallery]
+      summary: Delete gallery image (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /contacts:
+    get:
+      operationId: getContacts
+      tags: [contacts]
+      summary: Get contact information
+      responses:
+        "200":
+          description: Contact info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+    patch:
+      operationId: updateContacts
+      tags: [contacts]
+      summary: Update contact information (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactsUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+
+  /content/homepage:
+    get:
+      operationId: getHomepageContent
+      tags: [content]
+      summary: Get editable homepage content
+      responses:
+        "200":
+          description: Homepage content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomepageContent"
+    patch:
+      operationId: updateHomepageContent
+      tags: [content]
+      summary: Update homepage content (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomepageContentUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomepageContent"
+
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminAuth"
+        "401":
+          description: Invalid credentials
+
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+
+  /admin/me:
+    get:
+      operationId: getAdminMe
+      tags: [admin]
+      summary: Get current admin session
+      responses:
+        "200":
+          description: Admin session info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Not authenticated
+
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [admin]
+      summary: Get admin dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
-        status:
-          type: string
-      required:
-        - status
+        status: { type: string }
 
+    NewsArticle:
+      type: object
+      required: [id, title, excerpt, content, category, imageUrl, publishedAt, createdAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        titleRu: { type: ["string", "null"] }
+        titleEn: { type: ["string", "null"] }
+        excerpt: { type: string }
+        content: { type: string }
+        category: { type: string }
+        imageUrl: { type: ["string", "null"] }
+        publishedAt: { type: string }
+        createdAt: { type: string }
+        isFeatured: { type: boolean }
+
+    NewsInput:
+      type: object
+      required: [title, excerpt, content, category]
+      properties:
+        title: { type: string }
+        titleRu: { type: string }
+        titleEn: { type: string }
+        excerpt: { type: string }
+        content: { type: string }
+        category: { type: string }
+        imageUrl: { type: string }
+        isFeatured: { type: boolean }
+
+    NewsUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        titleRu: { type: string }
+        titleEn: { type: string }
+        excerpt: { type: string }
+        content: { type: string }
+        category: { type: string }
+        imageUrl: { type: string }
+        isFeatured: { type: boolean }
+
+    Banner:
+      type: object
+      required: [id, title, imageUrl, order, isActive]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        subtitle: { type: ["string", "null"] }
+        imageUrl: { type: string }
+        linkUrl: { type: ["string", "null"] }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    BannerInput:
+      type: object
+      required: [title, imageUrl]
+      properties:
+        title: { type: string }
+        subtitle: { type: string }
+        imageUrl: { type: string }
+        linkUrl: { type: string }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    BannerUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        subtitle: { type: string }
+        imageUrl: { type: string }
+        linkUrl: { type: string }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    Statistics:
+      type: object
+      required: [id, students, professors, departments, years, programs, partners]
+      properties:
+        id: { type: integer }
+        students: { type: integer }
+        professors: { type: integer }
+        departments: { type: integer }
+        years: { type: integer }
+        programs: { type: integer }
+        partners: { type: integer }
+
+    StatisticsUpdate:
+      type: object
+      properties:
+        students: { type: integer }
+        professors: { type: integer }
+        departments: { type: integer }
+        years: { type: integer }
+        programs: { type: integer }
+        partners: { type: integer }
+
+    GalleryImage:
+      type: object
+      required: [id, imageUrl, caption, order]
+      properties:
+        id: { type: integer }
+        imageUrl: { type: string }
+        caption: { type: ["string", "null"] }
+        order: { type: integer }
+
+    GalleryImageInput:
+      type: object
+      required: [imageUrl]
+      properties:
+        imageUrl: { type: string }
+        caption: { type: string }
+        order: { type: integer }
+
+    Contacts:
+      type: object
+      required: [id, address, phone, email, workingHours]
+      properties:
+        id: { type: integer }
+        address: { type: string }
+        addressRu: { type: ["string", "null"] }
+        phone: { type: string }
+        email: { type: string }
+        workingHours: { type: string }
+        mapLat: { type: ["number", "null"] }
+        mapLng: { type: ["number", "null"] }
+        facebook: { type: ["string", "null"] }
+        telegram: { type: ["string", "null"] }
+        instagram: { type: ["string", "null"] }
+        youtube: { type: ["string", "null"] }
+
+    ContactsUpdate:
+      type: object
+      properties:
+        address: { type: string }
+        addressRu: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        workingHours: { type: string }
+        mapLat: { type: number }
+        mapLng: { type: number }
+        facebook: { type: string }
+        telegram: { type: string }
+        instagram: { type: string }
+        youtube: { type: string }
+
+    HomepageContent:
+      type: object
+      required: [id, heroTitle, heroSubtitle, aboutTitle, aboutBody, missionText]
+      properties:
+        id: { type: integer }
+        heroTitle: { type: string }
+        heroSubtitle: { type: string }
+        aboutTitle: { type: string }
+        aboutBody: { type: string }
+        missionText: { type: string }
+        visionText: { type: ["string", "null"] }
+
+    HomepageContentUpdate:
+      type: object
+      properties:
+        heroTitle: { type: string }
+        heroSubtitle: { type: string }
+        aboutTitle: { type: string }
+        aboutBody: { type: string }
+        missionText: { type: string }
+        visionText: { type: string }
+
+    AdminLoginInput:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string }
+
+    AdminAuth:
+      type: object
+      required: [success, message]
+      properties:
+        success: { type: boolean }
+        message: { type: string }
+
+    AdminSession:
+      type: object
+      required: [username, isAdmin]
+      properties:
+        username: { type: string }
+        isAdmin: { type: boolean }
+
+    AdminDashboard:
+      type: object
+      required: [totalNews, totalBanners, totalGalleryImages]
+      properties:
+        totalNews: { type: integer }
+        totalBanners: { type: integer }
+        totalGalleryImages: { type: integer }
+        recentNews:
+          type: array
+          items: { $ref: "#/components/schemas/NewsArticle" }
