@@ -1,5 +1,5 @@
 import { useGetStatistics } from "@workspace/api-client-react";
-import { Users, BookOpen, Building2, Calendar, Award, Globe } from "lucide-react";
+import { Users, GraduationCap, BookOpen, Calendar, Trophy, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function StatisticsBar() {
@@ -26,12 +26,12 @@ export function StatisticsBar() {
   if (!stats) return null;
 
   const statItems = [
-    { icon: Users, label: "Students", value: stats.students },
-    { icon: BookOpen, label: "Professors", value: stats.professors },
-    { icon: Building2, label: "Departments", value: stats.departments },
-    { icon: Calendar, label: "Years of Excellence", value: stats.years },
-    { icon: Award, label: "Programs", value: stats.programs },
-    { icon: Globe, label: "Global Partners", value: stats.partners },
+    { icon: Users, label: "O'quvchilar", value: stats.students },
+    { icon: GraduationCap, label: "O'qituvchilar", value: stats.professors },
+    { icon: BookOpen, label: "Sinflar", value: stats.departments },
+    { icon: Calendar, label: "Faoliyat yillari", value: stats.years },
+    { icon: Trophy, label: "To'garaklar", value: stats.programs },
+    { icon: Star, label: "Olimpiada g'oliblari", value: stats.partners },
   ];
 
   return (
@@ -39,7 +39,7 @@ export function StatisticsBar() {
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {statItems.map((item, index) => (
-            <motion.div 
+            <motion.div
               key={item.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

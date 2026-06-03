@@ -11,8 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Lock, User } from "lucide-react";
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
+  username: z.string().min(1, "Foydalanuvchi nomi kiritilishi shart"),
+  password: z.string().min(1, "Parol kiritilishi shart"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -60,10 +60,10 @@ export default function AdminLoginPage() {
         <div className="bg-card rounded-2xl shadow-2xl p-8 border">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="text-primary-foreground font-bold text-2xl">AB</span>
+              <span className="text-primary-foreground font-bold text-lg">OIM</span>
             </div>
             <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
-            <p className="text-muted-foreground mt-2 text-sm">Al-Beruni University boshqaruv tizimi</p>
+            <p className="text-muted-foreground mt-2 text-sm">Olmazor ixtisoslashtirilgan maktabi</p>
           </div>
 
           <Form {...form}>
@@ -123,10 +123,6 @@ export default function AdminLoginPage() {
               </Button>
             </form>
           </Form>
-
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Admin: <code className="bg-muted px-1 rounded">admin</code> / Parol: <code className="bg-muted px-1 rounded">alberuni2024</code>
-          </p>
         </div>
       </div>
     </div>

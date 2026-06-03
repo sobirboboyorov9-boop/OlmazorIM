@@ -59,12 +59,12 @@ export default function AdminStatisticsPage() {
   };
 
   const FIELDS = [
-    { name: "students" as const, label: "Talabalar soni" },
+    { name: "students" as const, label: "O'quvchilar soni" },
     { name: "professors" as const, label: "O'qituvchilar soni" },
-    { name: "departments" as const, label: "Fakultetlar soni" },
+    { name: "departments" as const, label: "Sinflar soni" },
     { name: "years" as const, label: "Faoliyat yillari" },
-    { name: "programs" as const, label: "Ta'lim dasturlari" },
-    { name: "partners" as const, label: "Xalqaro hamkorlar" },
+    { name: "programs" as const, label: "To'garaklar soni" },
+    { name: "partners" as const, label: "Olimpiada g'oliblari" },
   ];
 
   return (

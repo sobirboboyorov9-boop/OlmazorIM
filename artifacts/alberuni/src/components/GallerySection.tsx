@@ -22,12 +22,12 @@ export function GallerySection() {
   if (!gallery || gallery.length === 0) return null;
 
   return (
-    <section className="py-24 bg-background">
+    <section id="achievements" className="py-24 bg-background">
       <div className="container mx-auto px-4 md:px-8">
         <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Galereya</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Maktab hayotidan</h2>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Universitetimiz hayotidan lavhalar
+            O'quvchilarimiz, tadbirlar va maktabimiz muhitidan lavhalar
           </p>
         </div>
 
@@ -42,12 +42,12 @@ export function GallerySection() {
               className={`relative overflow-hidden rounded-xl bg-gradient-to-br from-primary/10 to-secondary group cursor-pointer ${
                 index === 0 ? "row-span-2 col-span-2" : ""
               }`}
-              style={{ aspectRatio: index === 0 ? "1" : "1" }}
+              style={{ aspectRatio: "1" }}
               data-testid={`img-gallery-${image.id}`}
             >
               <img
                 src={image.imageUrl}
-                alt={image.caption || `Gallery image ${index + 1}`}
+                alt={image.caption || `Galereya rasmi ${index + 1}`}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";

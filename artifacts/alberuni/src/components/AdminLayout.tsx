@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { useGetAdminMe, useAdminLogout } from "@workspace/api-client-react";
-import { useEffect } from "react";
+import { useGetAdminMe, useAdminLogout, getGetAdminMeQueryKey } from "@workspace/api-client-react";
 import {
   LayoutDashboard,
   Newspaper,
@@ -14,8 +13,6 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { getGetAdminMeQueryKey } from "@workspace/api-client-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -69,14 +66,14 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-6 border-b border-sidebar-border flex items-center justify-between">
+        <div className="p-5 border-b border-sidebar-border flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-sidebar-primary rounded-xl flex items-center justify-center text-sidebar-primary-foreground font-bold text-sm">
-              AB
+            <div className="w-9 h-9 bg-sidebar-primary rounded-xl flex items-center justify-center text-sidebar-primary-foreground font-bold text-xs">
+              OIM
             </div>
             <div>
-              <p className="font-bold text-sm">Al-Beruni</p>
-              <p className="text-xs text-sidebar-foreground/60">Admin Panel</p>
+              <p className="font-bold text-xs leading-tight">Olmazor ixtisoslashtirilgan</p>
+              <p className="text-xs text-sidebar-foreground/60">maktabi — Admin</p>
             </div>
           </Link>
           <button

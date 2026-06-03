@@ -2,13 +2,12 @@ import { useState } from "react";
 import { useListNews } from "@workspace/api-client-react";
 import { format } from "date-fns";
 import { Link } from "wouter";
-import { Calendar, ArrowRight, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Calendar, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const CATEGORIES = ["barcha", "fan", "talabalar", "ilm", "xalqaro", "infratuzilma", "sport"];
+const CATEGORIES = ["olimpiada", "tadbir", "sport", "fan", "madaniyat", "o'qituvchilar"];
 
 export default function NewsPage() {
   const [page, setPage] = useState(1);
@@ -28,7 +27,7 @@ export default function NewsPage() {
         <div className="container mx-auto px-4 md:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4" data-testid="text-page-title">Yangiliklar</h1>
           <p className="text-primary-foreground/80 text-lg max-w-2xl">
-            Universitetning eng so'nggi yangiliklari, tadqiqotlar va hodisalari
+            Maktabimiz hayotidagi voqealar, olimpiadalar, tadbirlar va muhim ma'lumotlar
           </p>
         </div>
       </div>
@@ -45,7 +44,7 @@ export default function NewsPage() {
           >
             Barchasi
           </button>
-          {CATEGORIES.filter(c => c !== "barcha").map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => { setCategory(cat); setPage(1); }}
@@ -86,7 +85,7 @@ export default function NewsPage() {
                   className="bg-card rounded-xl overflow-hidden border shadow-sm hover:shadow-md transition-all h-full flex flex-col group cursor-pointer"
                   data-testid={`card-news-${article.id}`}
                 >
-                  <div className="relative h-52 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/40">
+                  <div className="relative h-52 overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/40">
                     {article.imageUrl ? (
                       <img
                         src={article.imageUrl}
@@ -94,8 +93,8 @@ export default function NewsPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center">
-                        <span className="text-primary/30 text-6xl font-serif font-bold">AB</span>
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-primary/20 text-5xl font-bold">OIM</span>
                       </div>
                     )}
                     <div className="absolute top-4 left-4">

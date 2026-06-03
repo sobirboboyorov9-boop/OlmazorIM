@@ -11,7 +11,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4 md:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Bog'lanish</h1>
           <p className="text-primary-foreground/80 text-lg max-w-2xl">
-            Biz bilan bog'laning — savollaringizga javob berishdan mamnunmiz
+            Savol va takliflaringiz uchun biz bilan bog'laning
           </p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground font-medium mb-1">Manzil</p>
-                    <p className="font-medium" data-testid="text-address">{contacts?.address || "Nukus, Qoraqalpog'iston"}</p>
+                    <p className="font-medium" data-testid="text-address">{contacts?.address || "Toshkent sh., Olmazor tumani"}</p>
                     {contacts?.addressRu && (
                       <p className="text-sm text-muted-foreground mt-1">{contacts.addressRu}</p>
                     )}
@@ -60,7 +60,7 @@ export default function ContactPage() {
                       className="font-medium hover:text-primary transition-colors"
                       data-testid="link-phone"
                     >
-                      {contacts?.phone || "+998 61 123-45-67"}
+                      {contacts?.phone || "+998 71 123-45-67"}
                     </a>
                   </div>
                 </div>
@@ -76,7 +76,7 @@ export default function ContactPage() {
                       className="font-medium hover:text-primary transition-colors"
                       data-testid="link-email"
                     >
-                      {contacts?.email || "info@alberuni.uz"}
+                      {contacts?.email || "info@olmazor-maktab.uz"}
                     </a>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm text-muted-foreground font-medium mb-1">Ish vaqti</p>
                     <p className="font-medium" data-testid="text-working-hours">
-                      {contacts?.workingHours || "Du-Ju: 9:00 - 18:00"}
+                      {contacts?.workingHours || "Du-Sha: 8:00 - 17:00"}
                     </p>
                   </div>
                 </div>
@@ -98,46 +98,30 @@ export default function ContactPage() {
                   <p className="text-sm text-muted-foreground font-medium mb-4">Ijtimoiy tarmoqlar</p>
                   <div className="flex gap-3">
                     {contacts?.facebook && (
-                      <a
-                        href={contacts.facebook}
-                        target="_blank"
-                        rel="noreferrer"
+                      <a href={contacts.facebook} target="_blank" rel="noreferrer"
                         className="p-3 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
-                        data-testid="link-social-facebook"
-                      >
+                        data-testid="link-social-facebook">
                         <Facebook className="h-5 w-5" />
                       </a>
                     )}
                     {contacts?.telegram && (
-                      <a
-                        href={contacts.telegram}
-                        target="_blank"
-                        rel="noreferrer"
+                      <a href={contacts.telegram} target="_blank" rel="noreferrer"
                         className="p-3 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
-                        data-testid="link-social-telegram"
-                      >
+                        data-testid="link-social-telegram">
                         <Send className="h-5 w-5" />
                       </a>
                     )}
                     {contacts?.instagram && (
-                      <a
-                        href={contacts.instagram}
-                        target="_blank"
-                        rel="noreferrer"
+                      <a href={contacts.instagram} target="_blank" rel="noreferrer"
                         className="p-3 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
-                        data-testid="link-social-instagram"
-                      >
+                        data-testid="link-social-instagram">
                         <Instagram className="h-5 w-5" />
                       </a>
                     )}
                     {contacts?.youtube && (
-                      <a
-                        href={contacts.youtube}
-                        target="_blank"
-                        rel="noreferrer"
+                      <a href={contacts.youtube} target="_blank" rel="noreferrer"
                         className="p-3 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
-                        data-testid="link-social-youtube"
-                      >
+                        data-testid="link-social-youtube">
                         <Youtube className="h-5 w-5" />
                       </a>
                     )}
@@ -152,7 +136,7 @@ export default function ContactPage() {
             <div className="text-center text-muted-foreground">
               <MapPin className="h-12 w-12 mx-auto mb-4 opacity-30" />
               <p className="text-lg font-medium">Xarita</p>
-              <p className="text-sm mt-1">Nukus, Qoraqalpog'iston, O'zbekiston</p>
+              <p className="text-sm mt-1">Toshkent shahri, Olmazor tumani</p>
             </div>
           </div>
         </div>

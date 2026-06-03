@@ -10,22 +10,22 @@ export function ContactStrip() {
     {
       icon: MapPin,
       label: "Manzil",
-      value: contacts?.address || "Nukus, Qoraqalpog'iston",
+      value: contacts?.address || "Toshkent sh., Olmazor tumani",
     },
     {
       icon: Phone,
       label: "Telefon",
-      value: contacts?.phone || "+998 61 222-22-22",
+      value: contacts?.phone || "+998 71 123-45-67",
     },
     {
       icon: Mail,
       label: "Email",
-      value: contacts?.email || "info@alberuni.uz",
+      value: contacts?.email || "info@olmazor-maktab.uz",
     },
     {
       icon: Clock,
       label: "Ish vaqti",
-      value: contacts?.workingHours || "Du-Ju: 9:00 - 18:00",
+      value: contacts?.workingHours || "Du-Sha: 8:00 - 17:00",
     },
   ];
 
@@ -35,7 +35,7 @@ export function ContactStrip() {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Biz bilan bog'laning</h2>
           <p className="text-muted-foreground text-lg">
-            Savollaringiz bormi? Biz yordam berishga tayyormiz
+            Savollaringiz bormi? Biz doim yordam berishga tayyormiz
           </p>
         </div>
 
