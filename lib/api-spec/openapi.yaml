@@ -24,6 +24,12 @@ tags:
     description: Admin authentication
   - name: content
     description: Homepage content sections
+  - name: teachers
+    description: Teaching staff
+  - name: alumni
+    description: Distinguished alumni
+  - name: classrooms
+    description: Classroom and facility photos
 
 paths:
   /healthz:
@@ -355,6 +361,225 @@ paths:
               schema:
                 $ref: "#/components/schemas/HomepageContent"
 
+  /teachers:
+    get:
+      operationId: listTeachers
+      tags: [teachers]
+      summary: List all teachers
+      responses:
+        "200":
+          description: List of teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Teacher" }
+    post:
+      operationId: createTeacher
+      tags: [teachers]
+      summary: Create a teacher (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+
+  /teachers/{id}:
+    get:
+      operationId: getTeacher
+      tags: [teachers]
+      summary: Get a single teacher
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Teacher
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateTeacher
+      tags: [teachers]
+      summary: Update a teacher (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+    delete:
+      operationId: deleteTeacher
+      tags: [teachers]
+      summary: Delete a teacher (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /alumni:
+    get:
+      operationId: listAlumni
+      tags: [alumni]
+      summary: List all distinguished alumni
+      responses:
+        "200":
+          description: List of alumni
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AlumniItem" }
+    post:
+      operationId: createAlumni
+      tags: [alumni]
+      summary: Create an alumni record (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlumniInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlumniItem"
+
+  /alumni/{id}:
+    patch:
+      operationId: updateAlumni
+      tags: [alumni]
+      summary: Update an alumni record (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlumniUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlumniItem"
+    delete:
+      operationId: deleteAlumni
+      tags: [alumni]
+      summary: Delete an alumni record (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /classrooms:
+    get:
+      operationId: listClassrooms
+      tags: [classrooms]
+      summary: List all classrooms/facilities
+      responses:
+        "200":
+          description: List of classrooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ClassroomItem" }
+    post:
+      operationId: createClassroom
+      tags: [classrooms]
+      summary: Create a classroom (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassroomItem"
+
+  /classrooms/{id}:
+    patch:
+      operationId: updateClassroom
+      tags: [classrooms]
+      summary: Update a classroom (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassroomItem"
+    delete:
+      operationId: deleteClassroom
+      tags: [classrooms]
+      summary: Delete a classroom (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
   /admin/login:
     post:
       operationId: adminLogin
@@ -587,6 +812,141 @@ components:
         aboutBody: { type: string }
         missionText: { type: string }
         visionText: { type: string }
+
+    Teacher:
+      type: object
+      required: [id, name, subject, experience, isActive, order]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        nameRu: { type: ["string", "null"] }
+        subject: { type: string }
+        subjectRu: { type: ["string", "null"] }
+        photo: { type: ["string", "null"] }
+        bio: { type: ["string", "null"] }
+        bioRu: { type: ["string", "null"] }
+        experience: { type: integer }
+        phone: { type: ["string", "null"] }
+        email: { type: ["string", "null"] }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    TeacherInput:
+      type: object
+      required: [name, subject]
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        subject: { type: string }
+        subjectRu: { type: string }
+        photo: { type: string }
+        bio: { type: string }
+        bioRu: { type: string }
+        experience: { type: integer }
+        phone: { type: string }
+        email: { type: string }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    TeacherUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        subject: { type: string }
+        subjectRu: { type: string }
+        photo: { type: string }
+        bio: { type: string }
+        bioRu: { type: string }
+        experience: { type: integer }
+        phone: { type: string }
+        email: { type: string }
+        order: { type: integer }
+        isActive: { type: boolean }
+
+    AlumniItem:
+      type: object
+      required: [id, name, graduationYear, achievement, order]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        nameRu: { type: ["string", "null"] }
+        graduationYear: { type: integer }
+        achievement: { type: string }
+        achievementRu: { type: ["string", "null"] }
+        photo: { type: ["string", "null"] }
+        bio: { type: ["string", "null"] }
+        bioRu: { type: ["string", "null"] }
+        currentPosition: { type: ["string", "null"] }
+        currentPositionRu: { type: ["string", "null"] }
+        order: { type: integer }
+
+    AlumniInput:
+      type: object
+      required: [name, graduationYear, achievement]
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        graduationYear: { type: integer }
+        achievement: { type: string }
+        achievementRu: { type: string }
+        photo: { type: string }
+        bio: { type: string }
+        bioRu: { type: string }
+        currentPosition: { type: string }
+        currentPositionRu: { type: string }
+        order: { type: integer }
+
+    AlumniUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        graduationYear: { type: integer }
+        achievement: { type: string }
+        achievementRu: { type: string }
+        photo: { type: string }
+        bio: { type: string }
+        bioRu: { type: string }
+        currentPosition: { type: string }
+        currentPositionRu: { type: string }
+        order: { type: integer }
+
+    ClassroomItem:
+      type: object
+      required: [id, name, imageUrl, order]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        nameRu: { type: ["string", "null"] }
+        description: { type: ["string", "null"] }
+        descriptionRu: { type: ["string", "null"] }
+        imageUrl: { type: string }
+        capacity: { type: ["integer", "null"] }
+        order: { type: integer }
+
+    ClassroomInput:
+      type: object
+      required: [name, imageUrl]
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        description: { type: string }
+        descriptionRu: { type: string }
+        imageUrl: { type: string }
+        capacity: { type: integer }
+        order: { type: integer }
+
+    ClassroomUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        nameRu: { type: string }
+        description: { type: string }
+        descriptionRu: { type: string }
+        imageUrl: { type: string }
+        capacity: { type: integer }
+        order: { type: integer }
 
     AdminLoginInput:
       type: object

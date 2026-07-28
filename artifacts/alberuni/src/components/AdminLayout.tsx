@@ -1,6 +1,6 @@
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useGetAdminMe, useAdminLogout, getGetAdminMeQueryKey } from "@workspace/api-client-react";
+import { useGetAdminMe, getGetAdminMeQueryKey, useAdminLogout } from "@workspace/api-client-react";
 import {
   LayoutDashboard,
   Newspaper,
@@ -12,140 +12,120 @@ import {
   LogOut,
   Menu,
   X,
+  Users,
+  Trophy,
+  School,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
-const NAV_ITEMS = [
+const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/news", label: "Yangiliklar", icon: Newspaper },
+  { href: "/admin/teachers", label: "O'qituvchilar", icon: Users },
+  { href: "/admin/alumni", label: "Bitiruvchilar", icon: Trophy },
+  { href: "/admin/classrooms", label: "Dars xonalari", icon: School },
   { href: "/admin/banners", label: "Bannerlar", icon: Image },
   { href: "/admin/statistics", label: "Statistika", icon: BarChart2 },
   { href: "/admin/gallery", label: "Galereya", icon: ImageIcon },
-  { href: "/admin/contacts", label: "Kontakt", icon: Phone },
+  { href: "/admin/contacts", label: "Kontaktlar", icon: Phone },
   { href: "/admin/content", label: "Kontent", icon: FileText },
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
-  const [location, setLocation] = useLocation();
+  const [location, navigate] = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { toast } = useToast();
-  const { data: session, isLoading } = useGetAdminMe({ query: { queryKey: getGetAdminMeQueryKey(), retry: false } });
+  const { data: session } = useGetAdminMe({
+    query: { queryKey: getGetAdminMeQueryKey(), retry: false },
+  });
   const logoutMutation = useAdminLogout();
-
-  useEffect(() => {
-    if (!isLoading && !session?.isAdmin) {
-      setLocation("/admin/login");
-    }
-  }, [session, isLoading, setLocation]);
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        toast({ title: "Chiqdingiz" });
-        setLocation("/admin/login");
-      },
+      onSuccess: () => navigate("/admin/login"),
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Yuklanmoqda...</div>
-      </div>
-    );
+  if (!session) {
+    navigate("/admin/login");
+    return null;
   }
 
-  if (!session?.isAdmin) return null;
+  const Sidebar = () => (
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+            <span className="text-white text-xs font-black">OIM</span>
+          </div>
+          <div>
+            <div className="font-bold text-gray-900 text-sm">Admin Panel</div>
+            <div className="text-gray-400 text-xs">Olmazor maktabi</div>
+          </div>
+        </div>
+      </div>
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        {navItems.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setSidebarOpen(false)}
+            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              location === href
+                ? "bg-blue-50 text-blue-700"
+                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            }`}
+          >
+            <Icon className="h-4 w-4 shrink-0" />
+            {label}
+          </Link>
+        ))}
+      </nav>
+      <div className="p-3 border-t">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 w-full transition-colors"
+        >
+          <LogOut className="h-4 w-4" />
+          Chiqish
+        </button>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen flex bg-muted/30">
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-sidebar text-sidebar-foreground flex flex-col transition-transform lg:translate-x-0 lg:static ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="p-5 border-b border-sidebar-border flex items-center justify-between">
-          <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-sidebar-primary rounded-xl flex items-center justify-center text-sidebar-primary-foreground font-bold text-xs">
-              OIM
-            </div>
-            <div>
-              <p className="font-bold text-xs leading-tight">Olmazor ixtisoslashtirilgan</p>
-              <p className="text-xs text-sidebar-foreground/60">maktabi — Admin</p>
-            </div>
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-sidebar-foreground/60 hover:text-sidebar-foreground"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map((item) => {
-            const isActive = location === item.href || (item.href !== "/admin" && location.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-                }`}
-                data-testid={`link-admin-nav-${item.label.toLowerCase()}`}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="p-4 border-t border-sidebar-border">
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-            data-testid="button-logout"
-          >
-            <LogOut className="h-5 w-5 mr-3" />
-            Chiqish
-          </Button>
-        </div>
+    <div className="flex h-screen bg-gray-50">
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex flex-col w-56 bg-white border-r shrink-0">
+        <Sidebar />
       </aside>
 
-      {/* Mobile overlay */}
+      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+          <aside className="absolute left-0 top-0 bottom-0 w-56 bg-white z-10">
+            <Sidebar />
+          </aside>
+        </div>
       )}
 
-      {/* Main Content */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-card border-b h-16 flex items-center px-6 gap-4">
-          <button
+        <header className="bg-white border-b px-4 h-14 flex items-center justify-between shrink-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden text-muted-foreground hover:text-foreground"
-            data-testid="button-sidebar-toggle"
           >
             <Menu className="h-5 w-5" />
-          </button>
-          <div className="flex-1" />
-          <div className="text-sm text-muted-foreground">
-            {session.username}
+          </Button>
+          <div className="hidden md:block" />
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500">{session.username}</span>
           </div>
         </header>
-
-        <main className="flex-1 p-6 overflow-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );

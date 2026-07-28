@@ -1,84 +1,105 @@
-import { Link } from "wouter";
-import { Menu } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState } from "react";
+
+const navItems = [
+  { label: "Bosh sahifa", href: "/" },
+  { label: "O'qituvchilar", href: "/teachers" },
+  { label: "Faxrli bitiruvchilar", href: "/alumni" },
+  { label: "Dars xonalari", href: "/classrooms" },
+  { label: "Yangiliklar", href: "/news" },
+  { label: "Bog'lanish", href: "/contact" },
+];
 
 export function Navbar() {
-  const navLinks = [
-    { label: "Maktab haqida", href: "/#about" },
-    { label: "Ta'lim", href: "/#education" },
-    { label: "Yutuqlar", href: "/#achievements" },
-    { label: "Yangiliklar", href: "/news" },
-    { label: "Bog'lanish", href: "/contact" },
-  ];
+  const [location] = useLocation();
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 md:px-8 flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2" data-testid="link-home-logo">
-          <div className="size-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-            OIM
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow">
+            <span className="text-white text-xs font-black tracking-tight">OIM</span>
           </div>
-          <div className="hidden sm:block">
-            <p className="font-bold text-sm leading-tight">Olmazor ixtisoslashtirilgan maktabi</p>
-            <p className="text-xs text-muted-foreground leading-tight">Toshkent shahri</p>
+          <div className="leading-tight">
+            <div className="font-bold text-gray-900 text-sm leading-none">Olmazor</div>
+            <div className="text-gray-500 text-xs">Ixtisoslashtirilgan maktab</div>
           </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-6">
-          {navLinks.map((link) => (
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {navItems.map((item) => (
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium transition-colors hover:text-primary"
-              data-testid={`link-nav-${link.label.toLowerCase()}`}
+              key={item.href}
+              href={item.href}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                location === item.href
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              }`}
             >
-              {link.label}
+              {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
-          <div className="flex gap-2 text-sm font-medium">
-            <span className="cursor-pointer text-primary">UZ</span>
-            <span className="cursor-pointer text-muted-foreground hover:text-primary">RU</span>
-            <span className="cursor-pointer text-muted-foreground hover:text-primary">EN</span>
-          </div>
-        </div>
-
-        {/* Mobile Nav */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden" data-testid="button-mobile-menu">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Menyuni ochish</span>
+        <div className="flex items-center gap-2">
+          <Link href="/admin" className="hidden lg:block">
+            <Button variant="outline" size="sm" className="text-xs border-blue-200 text-blue-700 hover:bg-blue-50">
+              Admin
             </Button>
-          </SheetTrigger>
-          <SheetContent side="right">
-            <div className="flex flex-col gap-6 mt-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-medium"
-                  data-testid={`link-mobile-nav-${link.label.toLowerCase()}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="flex gap-4 mt-4">
-                <span className="cursor-pointer text-primary font-bold">UZ</span>
-                <span className="cursor-pointer text-muted-foreground">RU</span>
-                <span className="cursor-pointer text-muted-foreground">EN</span>
+          </Link>
+
+          {/* Mobile menu */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-72 p-0">
+              <div className="flex items-center justify-between p-4 border-b">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+                    <span className="text-white text-xs font-black">OIM</span>
+                  </div>
+                  <span className="font-semibold text-gray-900 text-sm">Olmazor maktabi</span>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+              <nav className="p-4 space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      location === item.href
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="pt-2 border-t mt-2">
+                  <Link href="/admin" onClick={() => setOpen(false)}>
+                    <Button variant="outline" size="sm" className="w-full text-xs">
+                      Admin panel
+                    </Button>
+                  </Link>
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

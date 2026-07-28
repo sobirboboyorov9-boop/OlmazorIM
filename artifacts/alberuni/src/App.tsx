@@ -9,6 +9,9 @@ import HomePage from "@/pages/HomePage";
 import NewsPage from "@/pages/NewsPage";
 import NewsDetailPage from "@/pages/NewsDetailPage";
 import ContactPage from "@/pages/ContactPage";
+import TeachersPage from "@/pages/TeachersPage";
+import AlumniPage from "@/pages/AlumniPage";
+import ClassroomsPage from "@/pages/ClassroomsPage";
 import AdminLoginPage from "@/pages/admin/AdminLoginPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminNewsPage from "@/pages/admin/AdminNewsPage";
@@ -17,6 +20,9 @@ import AdminStatisticsPage from "@/pages/admin/AdminStatisticsPage";
 import AdminGalleryPage from "@/pages/admin/AdminGalleryPage";
 import AdminContactsPage from "@/pages/admin/AdminContactsPage";
 import AdminContentPage from "@/pages/admin/AdminContentPage";
+import AdminTeachersPage from "@/pages/admin/AdminTeachersPage";
+import AdminAlumniPage from "@/pages/admin/AdminAlumniPage";
+import AdminClassroomsPage from "@/pages/admin/AdminClassroomsPage";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -46,6 +52,9 @@ function Router() {
       <Route path="/news" component={() => <PublicLayout><NewsPage /></PublicLayout>} />
       <Route path="/news/:id" component={() => <PublicLayout><NewsDetailPage /></PublicLayout>} />
       <Route path="/contact" component={() => <PublicLayout><ContactPage /></PublicLayout>} />
+      <Route path="/teachers" component={() => <PublicLayout><TeachersPage /></PublicLayout>} />
+      <Route path="/alumni" component={() => <PublicLayout><AlumniPage /></PublicLayout>} />
+      <Route path="/classrooms" component={() => <PublicLayout><ClassroomsPage /></PublicLayout>} />
 
       {/* Admin routes */}
       <Route path="/admin/login" component={AdminLoginPage} />
@@ -56,6 +65,9 @@ function Router() {
       <Route path="/admin/gallery" component={() => <AdminLayout><AdminGalleryPage /></AdminLayout>} />
       <Route path="/admin/contacts" component={() => <AdminLayout><AdminContactsPage /></AdminLayout>} />
       <Route path="/admin/content" component={() => <AdminLayout><AdminContentPage /></AdminLayout>} />
+      <Route path="/admin/teachers" component={() => <AdminLayout><AdminTeachersPage /></AdminLayout>} />
+      <Route path="/admin/alumni" component={() => <AdminLayout><AdminAlumniPage /></AdminLayout>} />
+      <Route path="/admin/classrooms" component={() => <AdminLayout><AdminClassroomsPage /></AdminLayout>} />
 
       <Route component={NotFound} />
     </Switch>

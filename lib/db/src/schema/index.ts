@@ -4,3 +4,6 @@ export * from "./statistics";
 export * from "./gallery";
 export * from "./contacts";
 export * from "./content";
+export * from "./teachers";
+export * from "./alumni";
+export * from "./classrooms";

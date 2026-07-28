@@ -360,6 +360,267 @@ export const UpdateHomepageContentResponse = zod.object({
 
 
 /**
+ * @summary List all teachers
+ */
+export const ListTeachersResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "subject": zod.string(),
+  "subjectRu": zod.string().nullish(),
+  "photo": zod.string().nullish(),
+  "bio": zod.string().nullish(),
+  "bioRu": zod.string().nullish(),
+  "experience": zod.number(),
+  "phone": zod.string().nullish(),
+  "email": zod.string().nullish(),
+  "order": zod.number(),
+  "isActive": zod.boolean()
+})
+export const ListTeachersResponse = zod.array(ListTeachersResponseItem)
+
+
+/**
+ * @summary Create a teacher (admin)
+ */
+export const CreateTeacherBody = zod.object({
+  "name": zod.string(),
+  "nameRu": zod.string().optional(),
+  "subject": zod.string(),
+  "subjectRu": zod.string().optional(),
+  "photo": zod.string().optional(),
+  "bio": zod.string().optional(),
+  "bioRu": zod.string().optional(),
+  "experience": zod.number().optional(),
+  "phone": zod.string().optional(),
+  "email": zod.string().optional(),
+  "order": zod.number().optional(),
+  "isActive": zod.boolean().optional()
+})
+
+
+/**
+ * @summary Get a single teacher
+ */
+export const GetTeacherParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetTeacherResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "subject": zod.string(),
+  "subjectRu": zod.string().nullish(),
+  "photo": zod.string().nullish(),
+  "bio": zod.string().nullish(),
+  "bioRu": zod.string().nullish(),
+  "experience": zod.number(),
+  "phone": zod.string().nullish(),
+  "email": zod.string().nullish(),
+  "order": zod.number(),
+  "isActive": zod.boolean()
+})
+
+
+/**
+ * @summary Update a teacher (admin)
+ */
+export const UpdateTeacherParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateTeacherBody = zod.object({
+  "name": zod.string().optional(),
+  "nameRu": zod.string().optional(),
+  "subject": zod.string().optional(),
+  "subjectRu": zod.string().optional(),
+  "photo": zod.string().optional(),
+  "bio": zod.string().optional(),
+  "bioRu": zod.string().optional(),
+  "experience": zod.number().optional(),
+  "phone": zod.string().optional(),
+  "email": zod.string().optional(),
+  "order": zod.number().optional(),
+  "isActive": zod.boolean().optional()
+})
+
+export const UpdateTeacherResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "subject": zod.string(),
+  "subjectRu": zod.string().nullish(),
+  "photo": zod.string().nullish(),
+  "bio": zod.string().nullish(),
+  "bioRu": zod.string().nullish(),
+  "experience": zod.number(),
+  "phone": zod.string().nullish(),
+  "email": zod.string().nullish(),
+  "order": zod.number(),
+  "isActive": zod.boolean()
+})
+
+
+/**
+ * @summary Delete a teacher (admin)
+ */
+export const DeleteTeacherParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary List all distinguished alumni
+ */
+export const ListAlumniResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "graduationYear": zod.number(),
+  "achievement": zod.string(),
+  "achievementRu": zod.string().nullish(),
+  "photo": zod.string().nullish(),
+  "bio": zod.string().nullish(),
+  "bioRu": zod.string().nullish(),
+  "currentPosition": zod.string().nullish(),
+  "currentPositionRu": zod.string().nullish(),
+  "order": zod.number()
+})
+export const ListAlumniResponse = zod.array(ListAlumniResponseItem)
+
+
+/**
+ * @summary Create an alumni record (admin)
+ */
+export const CreateAlumniBody = zod.object({
+  "name": zod.string(),
+  "nameRu": zod.string().optional(),
+  "graduationYear": zod.number(),
+  "achievement": zod.string(),
+  "achievementRu": zod.string().optional(),
+  "photo": zod.string().optional(),
+  "bio": zod.string().optional(),
+  "bioRu": zod.string().optional(),
+  "currentPosition": zod.string().optional(),
+  "currentPositionRu": zod.string().optional(),
+  "order": zod.number().optional()
+})
+
+
+/**
+ * @summary Update an alumni record (admin)
+ */
+export const UpdateAlumniParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateAlumniBody = zod.object({
+  "name": zod.string().optional(),
+  "nameRu": zod.string().optional(),
+  "graduationYear": zod.number().optional(),
+  "achievement": zod.string().optional(),
+  "achievementRu": zod.string().optional(),
+  "photo": zod.string().optional(),
+  "bio": zod.string().optional(),
+  "bioRu": zod.string().optional(),
+  "currentPosition": zod.string().optional(),
+  "currentPositionRu": zod.string().optional(),
+  "order": zod.number().optional()
+})
+
+export const UpdateAlumniResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "graduationYear": zod.number(),
+  "achievement": zod.string(),
+  "achievementRu": zod.string().nullish(),
+  "photo": zod.string().nullish(),
+  "bio": zod.string().nullish(),
+  "bioRu": zod.string().nullish(),
+  "currentPosition": zod.string().nullish(),
+  "currentPositionRu": zod.string().nullish(),
+  "order": zod.number()
+})
+
+
+/**
+ * @summary Delete an alumni record (admin)
+ */
+export const DeleteAlumniParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary List all classrooms/facilities
+ */
+export const ListClassroomsResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "descriptionRu": zod.string().nullish(),
+  "imageUrl": zod.string(),
+  "capacity": zod.number().nullish(),
+  "order": zod.number()
+})
+export const ListClassroomsResponse = zod.array(ListClassroomsResponseItem)
+
+
+/**
+ * @summary Create a classroom (admin)
+ */
+export const CreateClassroomBody = zod.object({
+  "name": zod.string(),
+  "nameRu": zod.string().optional(),
+  "description": zod.string().optional(),
+  "descriptionRu": zod.string().optional(),
+  "imageUrl": zod.string(),
+  "capacity": zod.number().optional(),
+  "order": zod.number().optional()
+})
+
+
+/**
+ * @summary Update a classroom (admin)
+ */
+export const UpdateClassroomParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateClassroomBody = zod.object({
+  "name": zod.string().optional(),
+  "nameRu": zod.string().optional(),
+  "description": zod.string().optional(),
+  "descriptionRu": zod.string().optional(),
+  "imageUrl": zod.string().optional(),
+  "capacity": zod.number().optional(),
+  "order": zod.number().optional()
+})
+
+export const UpdateClassroomResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "nameRu": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "descriptionRu": zod.string().nullish(),
+  "imageUrl": zod.string(),
+  "capacity": zod.number().nullish(),
+  "order": zod.number()
+})
+
+
+/**
+ * @summary Delete a classroom (admin)
+ */
+export const DeleteClassroomParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
  * @summary Admin login
  */
 export const AdminLoginBody = zod.object({

@@ -167,6 +167,144 @@ export interface HomepageContentUpdate {
   visionText?: string;
 }
 
+export interface Teacher {
+  id: number;
+  name: string;
+  /** @nullable */
+  nameRu?: string | null;
+  subject: string;
+  /** @nullable */
+  subjectRu?: string | null;
+  /** @nullable */
+  photo?: string | null;
+  /** @nullable */
+  bio?: string | null;
+  /** @nullable */
+  bioRu?: string | null;
+  experience: number;
+  /** @nullable */
+  phone?: string | null;
+  /** @nullable */
+  email?: string | null;
+  order: number;
+  isActive: boolean;
+}
+
+export interface TeacherInput {
+  name: string;
+  nameRu?: string;
+  subject: string;
+  subjectRu?: string;
+  photo?: string;
+  bio?: string;
+  bioRu?: string;
+  experience?: number;
+  phone?: string;
+  email?: string;
+  order?: number;
+  isActive?: boolean;
+}
+
+export interface TeacherUpdate {
+  name?: string;
+  nameRu?: string;
+  subject?: string;
+  subjectRu?: string;
+  photo?: string;
+  bio?: string;
+  bioRu?: string;
+  experience?: number;
+  phone?: string;
+  email?: string;
+  order?: number;
+  isActive?: boolean;
+}
+
+export interface AlumniItem {
+  id: number;
+  name: string;
+  /** @nullable */
+  nameRu?: string | null;
+  graduationYear: number;
+  achievement: string;
+  /** @nullable */
+  achievementRu?: string | null;
+  /** @nullable */
+  photo?: string | null;
+  /** @nullable */
+  bio?: string | null;
+  /** @nullable */
+  bioRu?: string | null;
+  /** @nullable */
+  currentPosition?: string | null;
+  /** @nullable */
+  currentPositionRu?: string | null;
+  order: number;
+}
+
+export interface AlumniInput {
+  name: string;
+  nameRu?: string;
+  graduationYear: number;
+  achievement: string;
+  achievementRu?: string;
+  photo?: string;
+  bio?: string;
+  bioRu?: string;
+  currentPosition?: string;
+  currentPositionRu?: string;
+  order?: number;
+}
+
+export interface AlumniUpdate {
+  name?: string;
+  nameRu?: string;
+  graduationYear?: number;
+  achievement?: string;
+  achievementRu?: string;
+  photo?: string;
+  bio?: string;
+  bioRu?: string;
+  currentPosition?: string;
+  currentPositionRu?: string;
+  order?: number;
+}
+
+export interface ClassroomItem {
+  id: number;
+  name: string;
+  /** @nullable */
+  nameRu?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  descriptionRu?: string | null;
+  imageUrl: string;
+  /** @nullable */
+  capacity?: number | null;
+  order: number;
+}
+
+export interface ClassroomInput {
+  name: string;
+  nameRu?: string;
+  description?: string;
+  descriptionRu?: string;
+  imageUrl: string;
+  capacity?: number;
+  order?: number;
+}
+
+export interface ClassroomUpdate {
+  name?: string;
+  nameRu?: string;
+  description?: string;
+  descriptionRu?: string;
+  imageUrl?: string;
+  capacity?: number;
+  order?: number;
+}
+
 export interface AdminLoginInput {
   username: string;
   password: string;
