@@ -101,9 +101,9 @@ export default function AlumniPage() {
               <Star className="h-4 w-4 text-yellow-300" />
               Faxr va g'urur
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">Faxrli Bitiruvchilar</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">Faxrli O'quvchilar</h1>
             <p className="text-amber-100 text-lg max-w-xl mx-auto">
-              Maktabimizdan yetishib chiqqan g'ururli bitiruvchilarimiz
+              Maktabimizdan yetishib chiqqan g'ururli o'quvchilarimiz
             </p>
           </motion.div>
         </div>
