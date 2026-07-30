@@ -7,7 +7,7 @@ import { useState } from "react";
 const navItems = [
   { label: "Bosh sahifa", href: "/" },
   { label: "O'qituvchilar", href: "/teachers" },
-  { label: "Faxrli o'quvhilar", href: "/alumni" },
+  { label: "Faxrli o'quvchilar", href: "/alumni" },
   { label: "Dars xonalari", href: "/classrooms" },
   { label: "Yangiliklar", href: "/news" },
   { label: "Bog'lanish", href: "/contact" },
