@@ -11,7 +11,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "alberuni2024";
 
 const ADMIN_COOKIE = "alberuni_admin";
 
-// Helper: production HTTPS da cookie secure bo'lishi kerak
+// In production (HTTPS) cookies must be secure and sameSite "none"
 const isProduction = process.env.NODE_ENV === "production";
 
 router.post("/admin/login", async (req, res) => {
@@ -31,9 +31,9 @@ router.post("/admin/login", async (req, res) => {
 
   res.cookie(ADMIN_COOKIE, "authenticated", {
     httpOnly: true,
-    signed: true,                        // SESSION_SECRET bilan imzolanadi
-    secure: isProduction,                // Production (HTTPS) da cookie secure bo'ladi
-    sameSite: isProduction ? "none" : "lax",  // HTTPS cross-origin uchun "none" kerak
+    signed: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 24 * 60 * 60 * 1000,
   });
 
