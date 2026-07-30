@@ -41,7 +41,7 @@ function AlumniModal({ alumni, onClose }: { alumni: AlumniItem; onClose: () => v
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-4 left-4 text-white">
               <h2 className="text-xl font-bold">{alumni.name}</h2>
-              <p className="text-amber-200 text-sm">{alumni.graduationYear}-yil bitiruvchi</p>
+              <p className="text-amber-200 text-sm">{alumni.graduationYear}-yil</p>
             </div>
           </div>
 
