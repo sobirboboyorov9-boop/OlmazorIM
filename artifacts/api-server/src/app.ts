@@ -52,7 +52,7 @@ const FRONTEND_DIST =
 app.use(express.static(FRONTEND_DIST));
 
 // SPA fallback: serve index.html for all non-API routes so React Router works
-app.get("*", (_req, res) => {
+app.get("/{*splat}", (_req, res) => {
   res.sendFile(path.join(FRONTEND_DIST, "index.html"));
 });
 
