@@ -11,12 +11,10 @@ import {
   FileText,
   LogOut,
   Menu,
-  X,
   Users,
   Trophy,
   School,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -34,7 +32,7 @@ const navItems = [
 export function AdminLayout({ children }: { children: ReactNode }) {
   const [location, navigate] = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: session } = useGetAdminMe({
+  const { data: session, isLoading } = useGetAdminMe({
     query: { queryKey: getGetAdminMeQueryKey(), retry: false },
   });
   const logoutMutation = useAdminLogout();
@@ -45,6 +43,10 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     });
   };
 
+  if (isLoading) {
+    return null; // yoki spinner
+  }
+
   if (!session) {
     navigate("/admin/login");
     return null;
@@ -53,16 +55,21 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const Sidebar = () => (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-            <span className="text-white text-xs font-black">OIM</span>
-          </div>
+        <div className="flex items-center gap-3">
+          <img
+            src="/emblema.jpg"
+            alt="Olmazor tumani ixtisoslashtirilgan maktabi"
+            className="w-10 h-10 rounded-lg object-cover border border-gray-200 shadow-sm"
+          />
           <div>
             <div className="font-bold text-gray-900 text-sm">Admin Panel</div>
-            <div className="text-gray-400 text-xs">Olmazor maktabi</div>
+            <div className="text-gray-400 text-xs">
+              Olmazor ixtisoslashtirilgan maktabi
+            </div>
           </div>
         </div>
       </div>
+
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link
@@ -80,6 +87,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </Link>
         ))}
       </nav>
+
       <div className="p-3 border-t">
         <button
           onClick={handleLogout}
@@ -93,39 +101,38 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-56 bg-white border-r shrink-0">
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-64 bg-white border-r h-screen sticky top-0">
         <Sidebar />
       </aside>
 
-      {/* Mobile sidebar overlay */}
+      {/* Mobile Sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-56 bg-white z-10">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <aside className="relative w-64 bg-white h-full">
             <Sidebar />
           </aside>
         </div>
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b px-4 h-14 flex items-center justify-between shrink-0">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
+      <div className="flex-1 flex flex-col min-h-screen">
+        <div className="md:hidden flex items-center justify-between p-4 bg-white border-b">
+          <button
             onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg hover:bg-gray-100"
           >
             <Menu className="h-5 w-5" />
-          </Button>
-          <div className="hidden md:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">{session.username}</span>
-          </div>
-        </header>
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+          </button>
+          <span className="font-bold">Admin Panel</span>
+        </div>
+
+        <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
   );

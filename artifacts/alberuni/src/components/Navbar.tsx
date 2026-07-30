@@ -22,12 +22,19 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow">
-            <span className="text-white text-xs font-black tracking-tight">OIM</span>
-          </div>
+          <img
+            src="/emblema.jpg"
+            alt="Olmazor tumani ixtisoslashtirilgan maktabi"
+            className="w-9 h-9 rounded-xl object-cover shadow"
+          />
+
           <div className="leading-tight">
-            <div className="font-bold text-gray-900 text-sm leading-none">Olmazor</div>
-            <div className="text-gray-500 text-xs">Ixtisoslashtirilgan maktab</div>
+            <div className="font-bold text-gray-900 text-sm leading-none">
+              Olmazor
+            </div>
+            <div className="text-gray-500 text-xs">
+              Ixtisoslashtirilgan maktab
+            </div>
           </div>
         </Link>
 
@@ -50,7 +57,11 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <Link href="/admin" className="hidden lg:block">
-            <Button variant="outline" size="sm" className="text-xs border-blue-200 text-blue-700 hover:bg-blue-50">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs border-blue-200 text-blue-700 hover:bg-blue-50"
+            >
               Admin
             </Button>
           </Link>
@@ -62,18 +73,30 @@ export function Navbar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
+
             <SheetContent side="right" className="w-72 p-0">
               <div className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-                    <span className="text-white text-xs font-black">OIM</span>
-                  </div>
-                  <span className="font-semibold text-gray-900 text-sm">Olmazor maktabi</span>
+                  <img
+                    src="/emblema.jpg"
+                    alt="Olmazor tumani ixtisoslashtirilgan maktabi"
+                    className="w-8 h-8 rounded-lg object-cover"
+                  />
+
+                  <span className="font-semibold text-gray-900 text-sm">
+                    Olmazor maktabi
+                  </span>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setOpen(false)}
+                >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
+
               <nav className="p-4 space-y-1">
                 {navItems.map((item) => (
                   <Link
@@ -89,9 +112,14 @@ export function Navbar() {
                     {item.label}
                   </Link>
                 ))}
+
                 <div className="pt-2 border-t mt-2">
                   <Link href="/admin" onClick={() => setOpen(false)}>
-                    <Button variant="outline" size="sm" className="w-full text-xs">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs"
+                    >
                       Admin panel
                     </Button>
                   </Link>
