@@ -30,11 +30,11 @@ export function HeroSlider() {
       <div className="w-full h-[600px] bg-slate-900 relative flex items-center justify-center">
         <img 
           src="/images/hero-banner.png" 
-          alt="Al-Beruni University" 
+          alt="Olmazor ixtisoslashtirilgan maktabi" 
           className="absolute inset-0 w-full h-full object-cover opacity-50"
         />
         <div className="relative z-10 text-center text-white p-6 max-w-4xl">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Al-Beruni University</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Olmazor ixtisoslashtirilgan maktabi</h1>
           <p className="text-xl md:text-2xl text-slate-200">Shaping the future through excellence in education and research.</p>
         </div>
       </div>

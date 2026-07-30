@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold mb-2" data-testid="text-dashboard-title">Dashboard</h1>
-        <p className="text-muted-foreground">Al-Beruni University boshqaruv paneli</p>
+        <p className="text-muted-foreground">Olmazor ixtisoslashtirilgan maktab sayt boshqaruv paneli</p>
       </div>
 
       {/* Stat Cards */}
