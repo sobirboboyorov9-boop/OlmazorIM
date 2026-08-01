@@ -10,9 +10,8 @@ export default function ContactPage() {
   const lat = contacts?.mapLat ?? 41.335256;
   const lng = contacts?.mapLng ?? 69.248387;
 
-  // OpenStreetMap embed iframe — bbox marker atrofida, hech qanday API key shart emas
-  const bbox = `${lng - 0.012}%2C${lat - 0.006}%2C${lng + 0.012}%2C${lat + 0.006}`;
-  const iframeSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
+  // Yandex Maps widget — API key shart emas, iframe embed (yandex.uz, o'zbekcha)
+  const iframeSrc = `https://yandex.uz/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng}%2C${lat}%2Cpm2rdm&lang=uz_UZ`;
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -153,25 +152,26 @@ export default function ContactPage() {
             )}
           </motion.div>
 
-          {/* Map — oddiy OSM iframe, kutubxona yo'q */}
+          {/* Map — Yandex Maps widget (yangi koordinatalar) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="space-y-4"
           >
-            <div className="bg-slate-900 rounded-3xl shadow-2xl shadow-slate-900/25 ring-1 ring-white/10 overflow-hidden h-96 md:h-full min-h-80 relative">
+            <div className="bg-white rounded-3xl shadow-2xl shadow-slate-900/10 ring-1 ring-slate-200 overflow-hidden h-96 md:h-full min-h-80 relative">
               <iframe
                 src={iframeSrc}
-                title="Bizning manzil — OpenStreetMap"
+                title="Bizning manzil — Yandex Maps"
                 className="absolute inset-0 w-full h-full border-0"
                 loading="lazy"
                 allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
 
             <a
-              href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`}
+              href={`https://yandex.uz/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng}%2C${lat}`}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/35 hover:-translate-y-0.5 transition-all duration-200"
