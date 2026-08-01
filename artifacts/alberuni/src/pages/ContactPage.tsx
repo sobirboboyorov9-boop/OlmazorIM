@@ -7,10 +7,12 @@ import { motion } from "framer-motion";
 export default function ContactPage() {
   const { data: contacts, isLoading } = useGetContacts({ query: { queryKey: ["getContacts"] } });
 
-  const lat = contacts?.mapLat ?? 41.335256;
-  const lng = contacts?.mapLng ?? 69.248387;
+  // ===== Xarita koordinatalari (qat'iy) =====
+  // 41.335256, 69.248387 — API'dan nima kelsa ham xarita shu nuqtada turadi
+  const lat = 41.335256;
+  const lng = 69.248387;
 
-  // Yandex Maps widget — API key shart emas, iframe embed (yandex.uz, o'zbekcha)
+  // Yandex Maps widget — API key shart emas (ll/pt: lng,lat tartibida)
   const iframeSrc = `https://yandex.uz/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng}%2C${lat}%2Cpm2rdm&lang=uz_UZ`;
 
   return (
@@ -152,7 +154,7 @@ export default function ContactPage() {
             )}
           </motion.div>
 
-          {/* Map — Yandex Maps widget (yangi koordinatalar) */}
+          {/* Map — Yandex Maps widget (41.335256, 69.248387) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -169,6 +171,23 @@ export default function ContactPage() {
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
+
+            <a
+              href={`https://yandex.uz/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng}%2C${lat}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/35 hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <MapPin className="h-4 w-4" />
+              Xaritada ko'rish
+              <ArrowUpRight className="h-4 w-4 text-white/60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </motion.div>
+        </div>
+      </div>
+    </main>
+  );
+}
 
             <a
               href={`https://yandex.uz/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng}%2C${lat}`}
