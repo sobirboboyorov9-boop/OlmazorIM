@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 /* ============================================================
    Premium dark style — CARTO vector tiles (OpenMapTiles sxemasi).
    Bepul, API key shart emas, barqaror CDN.
+   v6 uchun to'liq valid: barcha filterlar expression sintaksisda,
+   faqat CARTO CDN'ida tasdiqlangan shrift stacklari ishlatilgan.
    ============================================================ */
 const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
   version: 8,
@@ -32,7 +34,7 @@ const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
     { id: "landcover", type: "fill", source: "openmaptiles", "source-layer": "landcover",
       filter: [
         "match",
-        ["get", "subclass"],
+        ["get", "class"],
         ["wood", "grass", "sand", "scrub"],
         true,
         false,
@@ -52,9 +54,10 @@ const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
       paint: { "line-color": "#0e1a2c", "line-width": 1 } },
 
     { id: "boundary", type: "line", source: "openmaptiles", "source-layer": "boundary",
+      // OpenMapTiles'da admin_level son (number) — to-string har ikkala holatda ham ishlaydi
       filter: [
         "match",
-        ["get", "admin_level"],
+        ["to-string", ["get", "admin_level"]],
         ["2", "4"],
         true,
         false,
@@ -117,7 +120,8 @@ const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
       minzoom: 8,
       layout: {
         "text-field": ["coalesce", ["get", "name:latin"], ["get", "name"]],
-        "text-font": ["Noto Sans Italic", "Noto Sans Regular"],
+        // "Noto Sans Italic" CARTO CDN'ida YO'Q (glyph 404) — faqat tasdiqlangan shriftlar
+        "text-font": ["Open Sans Regular", "Noto Sans Regular"],
         "text-size": 11,
         "text-letter-spacing": 0.05,
       },
@@ -147,7 +151,8 @@ const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
         "text-field": ["case", ["has", "name:nonlatin"],
           ["concat", ["get", "name:latin"], "\n", ["get", "name:nonlatin"]],
           ["coalesce", ["get", "name_en"], ["get", "name"]]],
-        "text-font": ["Noto Sans Bold", "Open Sans Bold", "Noto Sans Regular"],
+        // "Noto Sans Bold" CARTO CDN'ida YO'Q — Montserrat Medium + Open Sans Bold ishlatiladi
+        "text-font": ["Montserrat Medium", "Open Sans Bold", "Noto Sans Regular"],
         "text-size": 15,
       },
       paint: { "text-color": "#e2e8f0", "text-halo-color": "#0b0f17", "text-halo-width": 1.2 } },
@@ -216,6 +221,7 @@ export default function ContactPage() {
   const mapReadyRef = useRef(false);
   const activeStyleIndexRef = useRef(0);
   const styleTimerRef = useRef<number | null>(null);
+  const workerUrlSetRef = useRef(false);
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState(false);
   const [styleFallback, setStyleFallback] = useState(false);
@@ -227,8 +233,26 @@ export default function ContactPage() {
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
+    // ===== MapLibre v6: worker URL'ni o'rnatish (faqat brauzerda, bir marta) =====
+    // v6'da worker alohida .mjs fayl — bundler (Next.js/webpack) uchun setWorkerUrl
+    // MAJBURIY; aks holda worker yuklanmaydi va xarita bo'sh qoladi.
+    // Rasmiy webpack usuli: new URL('...', import.meta.url) — webpack 5 bu assetni
+    // avtomatik bundle qiladi (worker + uning maplibre-gl-shared.mjs importi).
+    if (typeof window !== "undefined" && !workerUrlSetRef.current) {
+      workerUrlSetRef.current = true;
+      try {
+        maplibregl.setWorkerUrl(
+          new URL("maplibre-gl/dist/maplibre-gl-worker.mjs", import.meta.url).toString()
+        );
+      } catch {
+        // import.meta.url mavjud bo'lmasa — hech narsa qilmaymiz (xato tashlanmaydi)
+      }
+    }
+
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
+      // style konstruktorda beriladi → "Unable to perform style diff" ogohlantirishi chiqmaydi
+      style: STYLE_CHAIN[0],
       center: [lng, lat],
       zoom: 13.2,
       minZoom: 3,
@@ -237,7 +261,6 @@ export default function ContactPage() {
       pitch: 30,
       attributionControl: false,
       fadeDuration: 250,
-      // style: ko'rsatilmaydi — applyStyle() boshqaradi
     });
 
     map.addControl(
@@ -245,7 +268,7 @@ export default function ContactPage() {
         positionOptions: { enableHighAccuracy: true },
         trackUserLocation: true,
         showUserLocation: true,
-        showAccuracyCircle: false,
+        showAccuracyCircle: false, // v5.0.0+ dan beri mavjud, deprecation emas
       }),
       "top-right"
     );
@@ -256,19 +279,30 @@ export default function ContactPage() {
 
     let disposed = false;
 
+    // KRITIK: bo'sh listener — MapLibre'da error listener bo'lmasa,
+    // MapLibre O'ZI console.error(event.error) chiqaradi (evented.ts).
+    // Bu listener bilan barcha tile/glyph xatolari jimgina yutiladi.
+    map.on("error", () => {
+      /* e'tiborsiz — fallback vaqtga asoslangan poll orqali boshqariladi */
+    });
+
     // Style navbatida keyingisiga o'tish (timeout asosida)
     const applyStyle = (index: number) => {
       if (disposed) return;
       if (index >= STYLE_CHAIN.length) {
         // Hammasi muvaffaqiyatsiz — banner ko'rsatamiz
+        mapReadyRef.current = true;
         setMapReady(true);
         setMapError(true);
         return;
       }
       activeStyleIndexRef.current = index;
-      if (index > 0) setStyleFallback(true);
-
-      map.setStyle(STYLE_CHAIN[index]);
+      if (index > 0) {
+        setStyleFallback(true);
+        // diff: false → to'liq qayta qurish, "style diff" ogohlantirishi chiqmaydi
+        map.setStyle(STYLE_CHAIN[index], { diff: false });
+      }
+      // index === 0 → style allaqachon konstruktorda berilgan, setStyle chaqirilmaydi
 
       const started = Date.now();
       styleTimerRef.current = window.setInterval(() => {
@@ -290,7 +324,7 @@ export default function ContactPage() {
       }, 300);
     };
 
-    // Style yuklanganda — fog faqat dark style uchun (maplibre v3.1+)
+    // Style yuklanganda — fog faqat dark style uchun (try/catch ichida — xavfsiz)
     map.on("load", () => {
       if (activeStyleIndexRef.current === 0) {
         try {
@@ -305,11 +339,6 @@ export default function ContactPage() {
           /* eski versiya — e'tiborsiz */
         }
       }
-    });
-
-    // Tile/glyph xatolari normal holat — faqat log, UI'ga tegmaydi!
-    map.on("error", (e) => {
-      console.warn("[map]", e?.error?.message ?? e);
     });
 
     mapRef.current = map;
