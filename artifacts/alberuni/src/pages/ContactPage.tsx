@@ -23,7 +23,8 @@ const PREMIUM_DARK_STYLE: maplibregl.StyleSpecification = {
     },
   },
   glyphs: "https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf",
-  attribution: "© CARTO · © OpenStreetMap contributors",
+  // Eslatma: root "attribution" property style spec'da YO'Q (v26+) —
+  // attribution AttributionControl({ customAttribution }) orqali beriladi.
   layers: [
     { id: "background", type: "background", paint: { "background-color": "#0b0f17" } },
 
@@ -236,8 +237,6 @@ export default function ContactPage() {
     // ===== MapLibre v6: worker URL'ni o'rnatish (faqat brauzerda, bir marta) =====
     // v6'da worker alohida .mjs fayl — bundler (Next.js/webpack) uchun setWorkerUrl
     // MAJBURIY; aks holda worker yuklanmaydi va xarita bo'sh qoladi.
-    // Rasmiy webpack usuli: new URL('...', import.meta.url) — webpack 5 bu assetni
-    // avtomatik bundle qiladi (worker + uning maplibre-gl-shared.mjs importi).
     if (typeof window !== "undefined" && !workerUrlSetRef.current) {
       workerUrlSetRef.current = true;
       try {
@@ -275,7 +274,14 @@ export default function ContactPage() {
     map.addControl(new maplibregl.NavigationControl({ showCompass: true, visualizePitch: true }), "top-right");
     map.addControl(new maplibregl.FullscreenControl(), "top-right");
     map.addControl(new maplibregl.ScaleControl({ maxWidth: 110 }), "bottom-left");
-    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+    // Attribution: customAttribution orqali — root style "attribution" property spec'da yo'q
+    map.addControl(
+      new maplibregl.AttributionControl({
+        compact: true,
+        customAttribution: "© CARTO · © OpenStreetMap contributors",
+      }),
+      "bottom-right"
+    );
 
     let disposed = false;
 
@@ -324,19 +330,22 @@ export default function ContactPage() {
       }, 300);
     };
 
-    // Style yuklanganda — fog faqat dark style uchun (try/catch ichida — xavfsiz)
+    // Style yuklanganda — atmosfera faqat dark style uchun.
+    // v6'da setFog OLIB TASHLANGAN — sky+fog bitta setSky() API'da (v4+).
     map.on("load", () => {
       if (activeStyleIndexRef.current === 0) {
         try {
-          map.setFog({
-            color: "#0b0f17",
-            "high-color": "#1f2937",
-            "space-color": "#0b0f17",
-            "horizon-blend": 0.35,
-            "star-intensity": 0,
+          map.setSky({
+            "sky-color": "#0b0f17",
+            "sky-horizon-blend": 0.85,
+            "horizon-color": "#1c2536",
+            "horizon-fog-blend": 0.45,
+            "fog-color": "#0b0f17",
+            "fog-ground-blend": 0.25,
+            "atmosphere-blend": 0.7,
           });
         } catch {
-          /* eski versiya — e'tiborsiz */
+          /* e'tiborsiz */
         }
       }
     });
