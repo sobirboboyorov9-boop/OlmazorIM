@@ -11,7 +11,10 @@ export default function NewsDetailPage() {
   const articleId = Number(id);
 
   const { data: article, isLoading } = useGetNewsArticle(articleId, {
-    query: { enabled: !!articleId, queryKey: getGetNewsArticleQueryKey(articleId) },
+    query: {
+      enabled: !!articleId,
+      queryKey: getGetNewsArticleQueryKey(articleId),
+    },
   });
 
   if (isLoading) {
@@ -23,7 +26,9 @@ export default function NewsDetailPage() {
           <Skeleton className="h-6 w-48 mb-8" />
           <Skeleton className="h-80 w-full rounded-xl mb-8" />
           <div className="space-y-4">
-            {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-4 w-full" />)}
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-4 w-full" />
+            ))}
           </div>
         </div>
       </main>
@@ -34,7 +39,9 @@ export default function NewsDetailPage() {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl font-bold text-muted-foreground mb-4">Maqola topilmadi</p>
+          <p className="text-2xl font-bold text-muted-foreground mb-4">
+            Maqola topilmadi
+          </p>
           <Button asChild>
             <Link href="/news">Yangiliklarga qaytish</Link>
           </Button>
@@ -43,9 +50,19 @@ export default function NewsDetailPage() {
     );
   }
 
+  const additionalImages = Array.isArray(article.images)
+    ? article.images.filter(
+        (url) =>
+          typeof url === "string" &&
+          url.trim() !== "" &&
+          url !== article.imageUrl
+      )
+    : [];
+
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 md:px-8 py-12 max-w-4xl">
+
         <Button
           asChild
           variant="ghost"
@@ -59,7 +76,12 @@ export default function NewsDetailPage() {
         </Button>
 
         <div className="mb-4">
-          <Badge className="uppercase tracking-wider" data-testid="text-category">{article.category}</Badge>
+          <Badge
+            className="uppercase tracking-wider"
+            data-testid="text-category"
+          >
+            {article.category}
+          </Badge>
         </div>
 
         <h1
@@ -76,45 +98,45 @@ export default function NewsDetailPage() {
           </time>
         </div>
 
+        {/* ASOSIY RASM — ORIGINAL NISBAT SAQLANADI */}
         {article.imageUrl && (
-  <div className="relative rounded-2xl overflow-hidden mb-6 aspect-video">
-    <img
-      src={article.imageUrl}
-      alt={article.title}
-      className="w-full h-full object-cover"
-      data-testid="img-article"
-    />
-  </div>
-)}
+          <div className="rounded-2xl overflow-hidden mb-10">
+            <img
+              src={article.imageUrl}
+              alt={article.title}
+              className="w-full h-auto block"
+              data-testid="img-article"
+            />
+          </div>
+        )}
 
-{Array.isArray(article.images) && article.images.length > 0 && (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-    {article.images
-      .filter((url) => typeof url === "string" && url.trim() !== "")
-      .filter((url) => url !== article.imageUrl)
-      .map((imageUrl, index) => (
-        <div
-          key={`${imageUrl}-${index}`}
-          className="relative overflow-hidden rounded-2xl aspect-video bg-muted"
-        >
-          <img
-            src={imageUrl}
-            alt={`${article.title} — ${index + 1}`}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            loading="lazy"
-            data-testid={`img-article-additional-${index}`}
-          />
-        </div>
-      ))}
-  </div>
-)}
+        {/* QO'SHIMCHA RASMLAR — ORIGINAL NISBAT SAQLANADI */}
+        {additionalImages.length > 0 && (
+          <div className="space-y-6 mb-10">
+            {additionalImages.map((imageUrl, index) => (
+              <div
+                key={`${imageUrl}-${index}`}
+                className="rounded-2xl overflow-hidden"
+              >
+                <img
+                  src={imageUrl}
+                  alt={`${article.title} — ${index + 2}`}
+                  className="w-full h-auto block"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div
           className="prose prose-lg dark:prose-invert max-w-none text-foreground"
           data-testid="text-article-content"
         >
           {article.content.split("\n").map((paragraph, i) => (
-            <p key={i} className="mb-4 leading-relaxed">{paragraph}</p>
+            <p key={i} className="mb-4 leading-relaxed">
+              {paragraph}
+            </p>
           ))}
         </div>
 
@@ -126,9 +148,8 @@ export default function NewsDetailPage() {
             </Link>
           </Button>
         </div>
+
       </div>
     </main>
   );
 }
-
-
