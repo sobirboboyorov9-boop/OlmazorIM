@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import { db, newsTable } from "@workspace/db";
 import { eq, desc, sql } from "drizzle-orm";
 import {
@@ -97,6 +97,7 @@ router.post("/news", async (req, res) => {
       content: body.data.content,
       category: body.data.category,
       imageUrl: body.data.imageUrl ?? null,
+      images: body.data.images ?? [],
       isFeatured: body.data.isFeatured ?? false,
     })
     .returning();
@@ -125,6 +126,7 @@ router.patch("/news/:id", async (req, res) => {
   if (body.data.content !== undefined) updates.content = body.data.content;
   if (body.data.category !== undefined) updates.category = body.data.category;
   if (body.data.imageUrl !== undefined) updates.imageUrl = body.data.imageUrl;
+  if (body.data.images !== undefined) updates.images = body.data.images;
   if (body.data.isFeatured !== undefined) updates.isFeatured = body.data.isFeatured;
 
   const [updated] = await db
@@ -153,3 +155,4 @@ router.delete("/news/:id", async (req, res) => {
 });
 
 export default router;
+

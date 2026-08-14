@@ -30,6 +30,7 @@ const newsSchema = z.object({
   content: z.string().min(1, "Kontent kiritilishi shart"),
   category: z.string().min(1, "Kategoriya kiritilishi shart"),
   imageUrl: z.string().optional(),
+  images: z.array(z.string()).default([]),
   isFeatured: z.boolean().default(false),
 });
 
@@ -43,6 +44,7 @@ type NewsArticle = {
   content: string;
   category: string;
   imageUrl: string | null;
+  images?: string[];
   publishedAt: string;
   isFeatured: boolean;
 };
@@ -67,12 +69,13 @@ function NewsFormDialog({
       content: article?.content ?? "",
       category: article?.category ?? "general",
       imageUrl: article?.imageUrl ?? "",
+      images: article?.images ?? [],
       isFeatured: article?.isFeatured ?? false,
     },
   });
 
   const onSubmit = (values: NewsFormOutput) => {
-    const data = { ...values, imageUrl: values.imageUrl || undefined };
+    const data = { ...values, imageUrl: values.imageUrl || undefined, images: values.images.filter((url) => url.trim() !== "") };
 
     if (article) {
       updateMutation.mutate(
@@ -127,6 +130,57 @@ function NewsFormDialog({
             <FormMessage />
           </FormItem>
         )} />
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center justify-between">
+                <FormLabel>Qo'shimcha rasmlar</FormLabel>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => field.onChange([...(field.value ?? []), ""])}
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Rasm qo'shish
+                </Button>
+              </div>
+
+              <div className="space-y-2">
+                {(field.value ?? []).map((url, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      value={url}
+                      onChange={(e) => {
+                        const images = [...(field.value ?? [])];
+                        images[index] = e.target.value;
+                        field.onChange(images);
+                      }}
+                      placeholder="https://..."
+                      data-testid={`input-news-additional-image-${index}`}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const images = [...(field.value ?? [])];
+                        images.splice(index, 1);
+                        field.onChange(images);
+                      }}
+                      aria-label="Rasmni o'chirish"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField control={form.control} name="excerpt" render={({ field }) => (
           <FormItem>
             <FormLabel>Qisqa ma'lumot</FormLabel>
@@ -288,4 +342,5 @@ export default function AdminNewsPage() {
     </div>
   );
 }
+
 
