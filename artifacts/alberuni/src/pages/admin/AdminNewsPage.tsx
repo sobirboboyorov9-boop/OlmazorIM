@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   useListNews,
   useCreateNewsArticle,
@@ -33,7 +33,8 @@ const newsSchema = z.object({
   isFeatured: z.boolean().default(false),
 });
 
-type NewsForm = z.infer<typeof newsSchema>;
+type NewsFormInput = z.input<typeof newsSchema>;
+type NewsFormOutput = z.output<typeof newsSchema>;
 
 type NewsArticle = {
   id: number;
@@ -58,7 +59,7 @@ function NewsFormDialog({
   const createMutation = useCreateNewsArticle();
   const updateMutation = useUpdateNewsArticle();
 
-  const form = useForm<NewsForm>({
+  const form = useForm<NewsFormInput, any, NewsFormOutput>({
     resolver: zodResolver(newsSchema),
     defaultValues: {
       title: article?.title ?? "",
@@ -70,7 +71,7 @@ function NewsFormDialog({
     },
   });
 
-  const onSubmit = (values: NewsForm) => {
+  const onSubmit = (values: NewsFormOutput) => {
     const data = { ...values, imageUrl: values.imageUrl || undefined };
 
     if (article) {
@@ -287,3 +288,4 @@ export default function AdminNewsPage() {
     </div>
   );
 }
+

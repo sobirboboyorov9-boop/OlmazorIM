@@ -1,4 +1,4 @@
-openapi: 3.1.0
+﻿openapi: 3.1.0
 info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
@@ -658,6 +658,10 @@ components:
         content: { type: string }
         category: { type: string }
         imageUrl: { type: ["string", "null"] }
+        images:
+          type: array
+          items:
+            type: string
         publishedAt: { type: string }
         createdAt: { type: string }
         isFeatured: { type: boolean }
@@ -673,6 +677,10 @@ components:
         content: { type: string }
         category: { type: string }
         imageUrl: { type: string }
+        images:
+          type: array
+          items:
+            type: string
         isFeatured: { type: boolean }
 
     NewsUpdate:
@@ -685,6 +693,10 @@ components:
         content: { type: string }
         category: { type: string }
         imageUrl: { type: string }
+        images:
+          type: array
+          items:
+            type: string
         isFeatured: { type: boolean }
 
     Banner:
@@ -979,3 +991,8 @@ components:
         recentNews:
           type: array
           items: { $ref: "#/components/schemas/NewsArticle" }
+
+
+
+
+

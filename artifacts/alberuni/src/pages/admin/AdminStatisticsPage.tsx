@@ -1,4 +1,4 @@
-import { useGetStatistics, useUpdateStatistics, getGetStatisticsQueryKey } from "@workspace/api-client-react";
+﻿import { useGetStatistics, useUpdateStatistics, getGetStatisticsQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,8 @@ const statsSchema = z.object({
   partners: z.coerce.number().min(0),
 });
 
-type StatsForm = z.infer<typeof statsSchema>;
+type StatsFormInput = z.input<typeof statsSchema>;
+type StatsFormOutput = z.output<typeof statsSchema>;
 
 export default function AdminStatisticsPage() {
   const { data: stats, isLoading } = useGetStatistics({ query: { queryKey: getGetStatisticsQueryKey() } });
@@ -27,7 +28,7 @@ export default function AdminStatisticsPage() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const form = useForm<StatsForm>({
+  const form = useForm<StatsFormInput, any, StatsFormOutput>({
     resolver: zodResolver(statsSchema),
     defaultValues: { students: 0, professors: 0, departments: 0, years: 0, programs: 0, partners: 0 },
   });
@@ -45,7 +46,7 @@ export default function AdminStatisticsPage() {
     }
   }, [stats, form]);
 
-  const onSubmit = (values: StatsForm) => {
+  const onSubmit = (values: StatsFormOutput) => {
     updateMutation.mutate(
       { data: values },
       {
@@ -88,7 +89,14 @@ export default function AdminStatisticsPage() {
                     <FormItem>
                       <FormLabel>{label}</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" min={0} data-testid={`input-stat-${name}`} />
+                        <Input
+  {...field}
+  type="number"
+  min={0}
+  value={field.value as number | undefined}
+  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+  data-testid={`input-stat-${name}`}
+/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -105,3 +113,4 @@ export default function AdminStatisticsPage() {
     </div>
   );
 }
+

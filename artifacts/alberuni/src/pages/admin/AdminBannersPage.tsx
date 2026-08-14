@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   useListBanners,
   useCreateBanner,
@@ -30,7 +30,8 @@ const bannerSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-type BannerForm = z.infer<typeof bannerSchema>;
+type BannerFormInput = z.input<typeof bannerSchema>;
+type BannerFormOutput = z.output<typeof bannerSchema>;
 type Banner = { id: number; title: string; subtitle: string | null; imageUrl: string; linkUrl: string | null; order: number; isActive: boolean };
 
 function BannerFormDialog({ banner, onClose }: { banner?: Banner; onClose: () => void }) {
@@ -39,7 +40,7 @@ function BannerFormDialog({ banner, onClose }: { banner?: Banner; onClose: () =>
   const createMutation = useCreateBanner();
   const updateMutation = useUpdateBanner();
 
-  const form = useForm<BannerForm>({
+  const form = useForm<BannerFormInput, any, BannerFormOutput>({
     resolver: zodResolver(bannerSchema),
     defaultValues: {
       title: banner?.title ?? "",
@@ -51,7 +52,7 @@ function BannerFormDialog({ banner, onClose }: { banner?: Banner; onClose: () =>
     },
   });
 
-  const onSubmit = (values: BannerForm) => {
+  const onSubmit = (values: BannerFormOutput) => {
     const data = {
       ...values,
       subtitle: values.subtitle || undefined,
@@ -95,7 +96,13 @@ function BannerFormDialog({ banner, onClose }: { banner?: Banner; onClose: () =>
           <FormItem><FormLabel>Havola (ixtiyoriy)</FormLabel><FormControl><Input {...field} placeholder="https://..." data-testid="input-banner-link" /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="order" render={({ field }) => (
-          <FormItem><FormLabel>Tartib raqami</FormLabel><FormControl><Input {...field} type="number" data-testid="input-banner-order" /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Tartib raqami</FormLabel><FormControl><Input
+  {...field}
+  type="number"
+  value={field.value as number | undefined}
+  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+  data-testid="input-banner-order"
+/></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="isActive" render={({ field }) => (
           <FormItem className="flex items-center gap-3 space-y-0">
@@ -195,3 +202,4 @@ export default function AdminBannersPage() {
     </div>
   );
 }
+

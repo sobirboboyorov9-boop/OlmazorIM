@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import {
   useListGallery,
   useCreateGalleryImage,
@@ -24,19 +24,20 @@ const gallerySchema = z.object({
   order: z.coerce.number().default(0),
 });
 
-type GalleryForm = z.infer<typeof gallerySchema>;
+type GalleryFormInput = z.input<typeof gallerySchema>;
+type GalleryFormOutput = z.output<typeof gallerySchema>;
 
 function GalleryAddDialog({ onClose }: { onClose: () => void }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const createMutation = useCreateGalleryImage();
 
-  const form = useForm<GalleryForm>({
+  const form = useForm<GalleryFormInput, any, GalleryFormOutput>({
     resolver: zodResolver(gallerySchema),
     defaultValues: { imageUrl: "", caption: "", order: 0 },
   });
 
-  const onSubmit = (values: GalleryForm) => {
+  const onSubmit = (values: GalleryFormOutput) => {
     createMutation.mutate(
       { data: { ...values, caption: values.caption || undefined } },
       {
@@ -60,7 +61,13 @@ function GalleryAddDialog({ onClose }: { onClose: () => void }) {
           <FormItem><FormLabel>Izoh (ixtiyoriy)</FormLabel><FormControl><Input {...field} data-testid="input-gallery-caption" /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="order" render={({ field }) => (
-          <FormItem><FormLabel>Tartib raqami</FormLabel><FormControl><Input {...field} type="number" data-testid="input-gallery-order" /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Tartib raqami</FormLabel><FormControl><Input
+  {...field}
+  type="number"
+  value={field.value as number | undefined}
+  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+  data-testid="input-gallery-order"
+/></FormControl><FormMessage /></FormItem>
         )} />
         <div className="flex gap-3">
           <Button type="submit" disabled={createMutation.isPending} className="flex-1" data-testid="button-gallery-save">
@@ -149,3 +156,4 @@ export default function AdminGalleryPage() {
     </div>
   );
 }
+
