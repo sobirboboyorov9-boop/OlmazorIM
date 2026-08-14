@@ -1,4 +1,4 @@
-import { useParams, Link } from "wouter";
+﻿import { useParams, Link } from "wouter";
 import { useGetNewsArticle, getGetNewsArticleQueryKey } from "@workspace/api-client-react";
 import { format } from "date-fns";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -77,15 +77,37 @@ export default function NewsDetailPage() {
         </div>
 
         {article.imageUrl && (
-          <div className="relative rounded-2xl overflow-hidden mb-10 aspect-video">
-            <img
-              src={article.imageUrl}
-              alt={article.title}
-              className="w-full h-full object-cover"
-              data-testid="img-article"
-            />
-          </div>
-        )}
+  <div className="relative rounded-2xl overflow-hidden mb-6 aspect-video">
+    <img
+      src={article.imageUrl}
+      alt={article.title}
+      className="w-full h-full object-cover"
+      data-testid="img-article"
+    />
+  </div>
+)}
+
+{Array.isArray(article.images) && article.images.length > 0 && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+    {article.images
+      .filter((url) => typeof url === "string" && url.trim() !== "")
+      .filter((url) => url !== article.imageUrl)
+      .map((imageUrl, index) => (
+        <div
+          key={`${imageUrl}-${index}`}
+          className="relative overflow-hidden rounded-2xl aspect-video bg-muted"
+        >
+          <img
+            src={imageUrl}
+            alt={`${article.title} — ${index + 1}`}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            loading="lazy"
+            data-testid={`img-article-additional-${index}`}
+          />
+        </div>
+      ))}
+  </div>
+)}
 
         <div
           className="prose prose-lg dark:prose-invert max-w-none text-foreground"
@@ -108,3 +130,4 @@ export default function NewsDetailPage() {
     </main>
   );
 }
+
