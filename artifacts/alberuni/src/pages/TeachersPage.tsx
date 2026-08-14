@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useListTeachers } from "@workspace/api-client-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, Mail, Award, BookOpen, Clock } from "lucide-react";
@@ -16,7 +16,7 @@ function TeacherModal({ teacher, onClose }: { teacher: Teacher; onClose: () => v
       >
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
         <motion.div
-          className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden z-10"
+          className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-hidden z-10 flex flex-col md:flex-row"
           initial={{ scale: 0.85, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.85, opacity: 0, y: 20 }}
@@ -30,22 +30,28 @@ function TeacherModal({ teacher, onClose }: { teacher: Teacher; onClose: () => v
             <X className="h-4 w-4 text-gray-600" />
           </button>
 
-          <div className="relative h-52 bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
+          <div className="relative w-full md:w-1/2 md:min-h-[520px] bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden flex items-center justify-center shrink-0">
             {teacher.photo ? (
               <img
                 src={teacher.photo}
                 alt={teacher.name}
-                className="w-full h-full object-cover opacity-60"
+                className="w-full h-auto max-h-[55vh] md:max-h-[80vh] object-contain block"
               />
-            ) : null}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            <div className="absolute bottom-4 left-4 text-white">
-              <h2 className="text-xl font-bold">{teacher.name}</h2>
-              <p className="text-blue-200 text-sm font-medium">{teacher.subject}</p>
+            ) : (
+              <div className="flex items-center justify-center h-64 w-full">
+                <Award className="h-20 w-20 text-white/50" />
+              </div>
+            )}
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+            <div className="absolute bottom-4 left-4 right-12 text-white">
+              <h2 className="text-xl md:text-2xl font-bold">{teacher.name}</h2>
+              <p className="text-blue-200 text-sm md:text-base font-medium">{teacher.subject}</p>
             </div>
           </div>
 
-          <div className="p-5 space-y-4">
+          <div className="w-full md:w-1/2 p-5 md:p-7 space-y-5 overflow-y-auto">
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-medium">
                 <Clock className="h-3.5 w-3.5" />
@@ -203,3 +209,6 @@ export default function TeachersPage() {
     </main>
   );
 }
+
+
+
